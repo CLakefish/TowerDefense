@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 [CustomEditor(typeof(FieldOfView))]
+
 public class FieldOfViewEditor : Editor
 {
     private void OnSceneGUI()
@@ -33,14 +35,22 @@ public class FieldOfView : Tower
                  viewAngle,
                  findDelay;
 
+    public Projectile projectile;
+    Transform dir;
     bool isActive = false;
 
     IEnumerator TargetFind(float delay)
     {
-        isActive = true;
-        FindTargets();
-        yield return new WaitForSeconds(delay);
-        isActive = false;
+        while (true)
+        {
+            isActive = true;
+
+            if (isActive)
+                FindTargets();
+
+            yield return new WaitForSeconds(delay);
+            isActive = false;
+        }
     }
 
     void FindTargets()
@@ -64,27 +74,36 @@ public class FieldOfView : Tower
             }
         }
 
-        if (targets.Count >= 1)
+        if (targets.Count >= 2)
         {
             switch (targetType)
             {
                 case (TargetType.First):
-                    GetFirstEnemy(targets, gameObject);
+                    dir = GetFirstEnemy(targets, gameObject);
                     break;
 
                 case (TargetType.Last):
-                    GetLastEnemy(targets, gameObject);
+                    dir = GetLastEnemy(targets, gameObject);
                     break;
 
                 case (TargetType.Random):
-                    GetRandomEnemy(targets, gameObject);
+                    dir = GetRandomEnemy(targets, gameObject);
                     break;
 
                 case (TargetType.Closest):
-                    GetClosestEnemy(targets, gameObject);
+                    dir = GetClosestEnemy(targets, gameObject);
                     break;
             }
         }
+        else if (targets.Count == 1)
+        {
+            dir = targets[0].transform;
+            Debug.DrawRay(transform.position, (targets[0].transform.position - transform.position).normalized, Color.red, .3f);
+        }
+        else return;
+
+        Projectile p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
+        p.rb.AddForce((dir.transform.position - transform.position).normalized * 50f, ForceMode2D.Impulse);
     }
 
     public Vector3 AngleDir(float angle, bool globalAngle)
@@ -99,11 +118,6 @@ public class FieldOfView : Tower
 
     // Start is called before the first frame update
     void Start()
-    {
-        if (!isActive) StartCoroutine(TargetFind(findDelay));
-    }
-
-    private void Update()
     {
         if (!isActive) StartCoroutine(TargetFind(findDelay));
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 using UnityEditor;
 
+
 [CustomEditor(typeof(PathCreator))]
 public class PathEditor : Editor
 {
@@ -125,9 +126,9 @@ public class PathCreator : MonoBehaviour
 
     private void Awake()
     {
-        pos = path.PointSpacing(0.1f);
+        pos = path.PointSpacing(0.25f);
 
-        for (int j = 0; j < pos.Length; j += 10)
+        for (int j = 0; j < pos.Length; j += 6)
         {
             GameObject p = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             p.transform.position = new Vector3(pos[j].x, pos[j].y, 20f);

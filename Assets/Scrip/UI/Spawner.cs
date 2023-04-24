@@ -8,6 +8,9 @@ public class Spawner : MonoBehaviour
 
     public void SpawnObj()
     {
-        Instantiate(spawnObj);
+        for (int i = 0; i < 5; i++)
+        {
+            Instantiate(spawnObj);
+        }
     }
 }

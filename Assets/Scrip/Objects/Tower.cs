@@ -15,12 +15,6 @@ public class Tower : MonoBehaviour
 
     public TargetType targetType;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public static Transform GetFirstEnemy(List<PathFollow> targets, GameObject g)
     {
         PathFollow farthest = targets[0];

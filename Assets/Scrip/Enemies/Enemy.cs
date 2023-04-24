@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : PathFollow
 {
     [Header("Variables")]
-    public int HealthCount;
+    public int HealthCount = 5;
 
     // Update is called once per frame
     void Update()
