@@ -95,7 +95,7 @@ public class PathEditor : Editor
         Handles.color = Color.white;
         for (int i = 0; i < path.NumPoints; i++)
         {
-            Vector2 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, Vector2.zero, Handles.CylinderHandleCap);
+            Vector3 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, Vector3.zero, Handles.CylinderHandleCap);
             if (path[i] != newPos)
             {
                 Undo.RecordObject(creator, "Move point");
@@ -118,7 +118,7 @@ public class PathEditor : Editor
 
 public class PathCreator : MonoBehaviour
 {
-    public Vector2[] pos;
+    public Vector3[] pos;
     public GameObject Holder;
 
     [HideInInspector]

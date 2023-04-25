@@ -14,8 +14,11 @@ public class Tower : MonoBehaviour
     }
 
     public TargetType targetType;
+    public PathCreator creator;
+    public float projectileSpeed;
+    public float overshootFix;
 
-    public static Transform GetFirstEnemy(List<PathFollow> targets, GameObject g)
+    public Vector3 GetFirstEnemy(List<PathFollow> targets, GameObject g)
     {
         PathFollow farthest = targets[0];
 
@@ -25,10 +28,11 @@ public class Tower : MonoBehaviour
         }
 
         Debug.DrawRay(g.transform.position, (farthest.transform.position - g.transform.position).normalized, Color.green, 0.1f);
-        return farthest.transform;
+
+        return PathDetection.CalculateBulletAhead(farthest, creator, overshootFix);
     }
 
-    public static Transform GetLastEnemy(List<PathFollow> targets, GameObject g)
+    public Vector3 GetLastEnemy(List<PathFollow> targets, GameObject g)
     {
         PathFollow closest = targets[0];
 
@@ -38,18 +42,20 @@ public class Tower : MonoBehaviour
         }
 
         Debug.DrawRay(g.transform.position, (closest.transform.position - g.transform.position).normalized, Color.magenta, 0.1f);
-        return closest.transform;
+
+        return PathDetection.CalculateBulletAhead(closest, creator, overshootFix);
     }
 
-    public static Transform GetRandomEnemy(List<PathFollow> targets, GameObject g)
+    public Vector3 GetRandomEnemy(List<PathFollow> targets, GameObject g)
     {
         PathFollow random = targets[Random.Range(0, targets.Count)];
 
         Debug.DrawRay(g.transform.position, (random.transform.position - g.transform.position).normalized, new Color(Random.Range(0f, 5.0f), Random.Range(0f, 5.0f), Random.Range(0f, 5.0f), 1), 0.1f);
-        return random.transform;
+
+        return PathDetection.CalculateBulletAhead(random, creator, overshootFix);
     }
 
-    public static Transform GetClosestEnemy(List<PathFollow> targets, GameObject g)
+    public Vector3 GetClosestEnemy(List<PathFollow> targets, GameObject g)
     {
         float closeDist = Mathf.Infinity;
         PathFollow closest = null;
@@ -67,7 +73,8 @@ public class Tower : MonoBehaviour
         }
 
         Debug.DrawRay(g.transform.position, (closest.transform.position - g.transform.position).normalized, new Color(255, 102, 0, 1), 0.1f);
-        return closest.transform;
+
+        return PathDetection.CalculateBulletAhead(closest, creator, overshootFix);
     }
 }
 
@@ -85,5 +92,11 @@ public static class PathDetection
         if (p.j > p2.j) return p2;
         else if (p.j < p2.j) return p;
         else return p;
+    }
+
+    public static Vector3 CalculateBulletAhead(PathFollow p, PathCreator creator, float overshootFix)
+    {
+        if (p.j >= creator.pos.Length || (p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)) >= creator.pos.Length) return creator.pos[creator.pos.Length - 3];
+        else return creator.pos[p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)];
     }
 }

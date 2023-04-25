@@ -21,7 +21,7 @@ public class Path
         };
     }
 
-    public Vector2 this[int i]
+    public Vector3 this[int i]
     {
         get
         {
@@ -122,9 +122,9 @@ public class Path
         }
     }
 
-    public Vector2[] PointSpacing(float spacing, float resolution = 1)
+    public Vector3[] PointSpacing(float spacing, float resolution = 1)
     {
-        List<Vector2> pointsE = new List<Vector2>();
+        List<Vector3> pointsE = new List<Vector3>();
 
         pointsE.Add(points[0]);
 

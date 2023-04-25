@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+using Unity.VisualScripting;
 
 [CustomEditor(typeof(FieldOfView))]
 
@@ -36,7 +36,7 @@ public class FieldOfView : Tower
                  findDelay;
 
     public Projectile projectile;
-    Transform dir;
+    Projectile p;
     bool isActive = false;
 
     IEnumerator TargetFind(float delay)
@@ -74,36 +74,46 @@ public class FieldOfView : Tower
             }
         }
 
-        if (targets.Count >= 2)
+        if (targets.Count == 0) return;
+
+        if (targets.Count != 0)
         {
-            switch (targetType)
+            Vector3 dir = targets[0].transform.position;
+
+            if (targets.Count >= 2)
             {
-                case (TargetType.First):
-                    dir = GetFirstEnemy(targets, gameObject);
-                    break;
+                switch (targetType)
+                {
+                    case (TargetType.First):
+                        dir = GetFirstEnemy(targets, gameObject);
+                        break;
 
-                case (TargetType.Last):
-                    dir = GetLastEnemy(targets, gameObject);
-                    break;
+                    case (TargetType.Last):
+                        dir = GetLastEnemy(targets, gameObject);
+                        break;
 
-                case (TargetType.Random):
-                    dir = GetRandomEnemy(targets, gameObject);
-                    break;
+                    case (TargetType.Random):
+                        dir = GetRandomEnemy(targets, gameObject);
+                        break;
 
-                case (TargetType.Closest):
-                    dir = GetClosestEnemy(targets, gameObject);
-                    break;
+                    case (TargetType.Closest):
+                        dir = GetClosestEnemy(targets, gameObject);
+                        break;
+                }
             }
-        }
-        else if (targets.Count == 1)
-        {
-            dir = targets[0].transform;
-            Debug.DrawRay(transform.position, (targets[0].transform.position - transform.position).normalized, Color.red, .3f);
-        }
-        else return;
+            else if (targets.Count == 1)
+            {
+                Debug.Log("e");
 
-        Projectile p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
-        p.rb.AddForce((dir.transform.position - transform.position).normalized * 50f, ForceMode2D.Impulse);
+                if (targets[0].j + Mathf.CeilToInt((targets[0].speed * 10f) - 2.6f) >= creator.pos.Length) dir = creator.pos[creator.pos.Length - 1];
+                else dir = targets[0].transform.position;
+
+                Debug.DrawRay(transform.position, (targets[0].transform.position - transform.position).normalized, Color.red, .3f);
+            }
+
+            p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
+            p.rb.AddForce((dir - transform.position).normalized * projectileSpeed, ForceMode2D.Impulse);
+        }
     }
 
     public Vector3 AngleDir(float angle, bool globalAngle)

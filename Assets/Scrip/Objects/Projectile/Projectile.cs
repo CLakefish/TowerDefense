@@ -22,12 +22,14 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.layer == 0)
         {
-            if (hitObjs.Contains(collision.gameObject)) return;
+            if (!hitObjs.Contains(collision.gameObject))
+            {
+                hitObjs.Add(collision.gameObject);
 
-            hitObjs.Add(collision.gameObject);
+                Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+                enemy.HealthCount -= Damage;
+            }
 
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            enemy.HealthCount -= Damage;
         }
 
         if (collision.gameObject.layer != 0)
@@ -40,13 +42,9 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        if (pierceCount == 0 || hitObjs.Count == Pierce)
+        if (pierceCount <= 0 || hitObjs.Count >= Pierce)
         {
             Destroy(gameObject);
-        }
-
-        if (hitObjs.Count == Pierce)
-        {
             hitObjs.Clear();
         }
     }

@@ -662,31 +662,13 @@ MonoBehaviour:
   Holder: {fileID: 910704355}
   path:
     points:
-    - {x: -0.89, y: 0.15}
-    - {x: -0.8488032, y: 0.19119763}
-    - {x: -0.86266345, y: 1.2570457}
-    - {x: -0.78045464, y: 6.1004667}
-    - {x: -0.7453518, y: 8.168589}
-    - {x: 3.6955938, y: 8.734886}
-    - {x: 3.8207455, y: 0.8338847}
-    - {x: 3.8925357, y: -3.6983361}
-    - {x: 7.9818773, y: -3.6331215}
-    - {x: 8.396935, y: 0.029842615}
-    - {x: 8.4394865, y: 0.40535915}
-    - {x: 8.41691, y: 3.139368}
-    - {x: 8.455932, y: 5.28284}
-    - {x: 8.498523, y: 7.6223717}
-    - {x: 12.686522, y: 8.217359}
-    - {x: 12.773832, y: 3.6910276}
-    - {x: 12.842683, y: 0.12170148}
-    - {x: 12.33284, y: -2.5934968}
-    - {x: 10.226052, y: -5.2750325}
-    - {x: 8.092248, y: -7.990955}
-    - {x: 3.9759603, y: -8.187576}
-    - {x: 1.5709689, y: -5.529594}
-    - {x: 1.2311826, y: -5.154064}
-    - {x: -0.52086115, y: -3.6744595}
-    - {x: -0.79644775, y: -1.5329962}
+    - {x: -10.117057, y: 2.1259644}
+    - {x: -1.9354372, y: 2.7596707}
+    - {x: -10.264428, y: -3.6320033}
+    - {x: -2.784549, y: -6.492424}
+    - {x: 1.658056, y: -8.191344}
+    - {x: 2.3794746, y: -4.2281137}
+    - {x: 4.2637334, y: -2.319243}
     isClosed: 0
 --- !u!4 &977445515
 Transform:
@@ -736,6 +718,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetType: 0
+  creator: {fileID: 977445514}
+  projectileSpeed: 40
+  overshootFix: 2.62
 --- !u!114 &1072425272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,6 +734,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetType: 0
+  creator: {fileID: 977445514}
+  projectileSpeed: 40
+  overshootFix: 0
   targetMask:
     serializedVersion: 2
     m_Bits: 1
@@ -756,9 +744,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 52
   targets: []
-  viewRadius: 8
+  viewRadius: 6.66
   viewAngle: 360
-  findDelay: 0.1
+  findDelay: 0.23
   projectile: {fileID: 3716981461597751988, guid: 7e3a2a0128c84b747b7df18acc5bd6a2, type: 3}
 --- !u!61 &1072425273
 BoxCollider2D:
@@ -846,7 +834,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072425270}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.12, y: 1.43, z: 0}
+  m_LocalPosition: {x: -2.14, y: -2.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

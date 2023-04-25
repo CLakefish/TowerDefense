@@ -6,6 +6,7 @@ public class PathFollow : MonoBehaviour
 {
     public PathCreator pathCreator;
     public float speed = 5;
+    public float pauseSeconds;
     public int j;
 
     private void Start()
@@ -22,9 +23,9 @@ public class PathFollow : MonoBehaviour
         {
             for (j = 0; j < pathCreator.pos.Length; j++)
             {
-                transform.position = pathCreator.pos[j];
+                transform.position = Vector3.Lerp(transform.position, pathCreator.pos[j], speed);
 
-                yield return new WaitForSeconds(speed);
+                yield return new WaitForSeconds(pauseSeconds);
             }
 
             if (!pathCreator.path.isClosed)
