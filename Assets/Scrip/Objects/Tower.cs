@@ -18,6 +18,11 @@ public class Tower : MonoBehaviour
     public float projectileSpeed;
     public float overshootFix;
 
+    void Start()
+    {
+        creator = GameObject.FindGameObjectWithTag("PathCreator").GetComponent<PathCreator>();
+    }
+
     public Vector3 GetFirstEnemy(List<PathFollow> targets, GameObject g)
     {
         PathFollow farthest = targets[0];
@@ -96,7 +101,7 @@ public static class PathDetection
 
     public static Vector3 CalculateBulletAhead(PathFollow p, PathCreator creator, float overshootFix)
     {
-        if (p.j >= creator.pos.Length || (p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)) >= creator.pos.Length) return creator.pos[creator.pos.Length - 3];
+        if (p.j >= creator.pos.Length || (p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)) >= creator.pos.Length) return creator.pos[creator.pos.Length - 1];
         else return creator.pos[p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)];
     }
 }

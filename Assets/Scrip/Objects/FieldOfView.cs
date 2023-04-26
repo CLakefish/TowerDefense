@@ -105,8 +105,8 @@ public class FieldOfView : Tower
             {
                 Debug.Log("e");
 
-                if (targets[0].j + Mathf.CeilToInt((targets[0].speed * 10f) - 2.6f) >= creator.pos.Length) dir = creator.pos[creator.pos.Length - 1];
-                else dir = targets[0].transform.position;
+                if (targets[0].j + Mathf.CeilToInt((targets[0].speed * 10f) - overshootFix) >= creator.pos.Length) dir = creator.pos[creator.pos.Length - 1];
+                else dir = creator.pos[targets[0].j + Mathf.CeilToInt((targets[0].speed * 10f) - overshootFix)];
 
                 Debug.DrawRay(transform.position, (targets[0].transform.position - transform.position).normalized, Color.red, .3f);
             }
@@ -129,6 +129,8 @@ public class FieldOfView : Tower
     // Start is called before the first frame update
     void Start()
     {
+        creator = GameObject.FindGameObjectWithTag("PathCreator").GetComponent<PathCreator>();
+
         if (!isActive) StartCoroutine(TargetFind(findDelay));
     }
 }
