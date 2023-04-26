@@ -9,12 +9,13 @@ public class UIPlace : MonoBehaviour
 {
     public Camera cam;
     public GameObject spawnedObjVisual;
-    public GameObject spawnedObj;
+    public GameObject[] spawnedObj;
     public LayerMask placableLayer;
     public bool isHolding = false;
 
     GameObject placedObj = null;
     GameObject heldObj;
+    int objSpawn;
 
     private void Update()
     {
@@ -24,9 +25,10 @@ public class UIPlace : MonoBehaviour
         }
     }
 
-    public void ObjClicked()
+    public void ObjClicked(int i)
     {
         isHolding = true;
+        objSpawn = i;
         CreateVisual();
     }
 
@@ -71,6 +73,6 @@ public class UIPlace : MonoBehaviour
     
     void spawn(Vector2 mousePos)
     {
-        placedObj = Instantiate(spawnedObj, mousePos, Quaternion.identity);
+        placedObj = Instantiate(spawnedObj[objSpawn], mousePos, Quaternion.identity);
     }
 }

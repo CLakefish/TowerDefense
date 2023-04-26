@@ -125,9 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1a78b31d69d6b5408499cbedad4af81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetType: 2
+  targetType: 0
   creator: {fileID: 0}
-  projectileSpeed: 47.77
+  projectileSpeed: 35
   overshootFix: 2.6
   targetMask:
     serializedVersion: 2
@@ -138,7 +138,7 @@ MonoBehaviour:
   targets: []
   viewRadius: 6.27
   viewAngle: 360
-  findDelay: 0.04
+  findDelay: 0.4
   projectile: {fileID: 3716981461597751988, guid: 7e3a2a0128c84b747b7df18acc5bd6a2, type: 3}
 --- !u!114 &7283212290416079903
 MonoBehaviour:
@@ -154,5 +154,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetType: 0
   creator: {fileID: 0}
-  projectileSpeed: 47.3
+  projectileSpeed: 35
   overshootFix: 2.6
