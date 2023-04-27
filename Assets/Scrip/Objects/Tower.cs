@@ -82,26 +82,3 @@ public class Tower : MonoBehaviour
         return PathDetection.CalculateBulletAhead(closest, creator, overshootFix);
     }
 }
-
-public static class PathDetection
-{
-    public static PathFollow GreaterPathProgress(PathFollow p, PathFollow p2)
-    {
-        if (p.j > p2.j) return p;
-        else if (p.j < p2.j) return p2;
-        else return p;
-    }
-
-    public static PathFollow LeastPathProgress(PathFollow p, PathFollow p2)
-    {
-        if (p.j > p2.j) return p2;
-        else if (p.j < p2.j) return p;
-        else return p;
-    }
-
-    public static Vector3 CalculateBulletAhead(PathFollow p, PathCreator creator, float overshootFix)
-    {
-        if (p.j >= creator.pos.Length || (p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)) >= creator.pos.Length) return creator.pos[creator.pos.Length - 1];
-        else return creator.pos[p.j + Mathf.CeilToInt((p.speed * 10f) - overshootFix)];
-    }
-}

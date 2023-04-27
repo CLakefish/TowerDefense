@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     internal int Pierce = 1;
     int pierceCount;
     internal int Damage = 1;
+    public float deathTime;
     internal Rigidbody2D rb;
     private List<GameObject> hitObjs = new List<GameObject>();
 
@@ -15,7 +16,6 @@ public class Projectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         pierceCount = Pierce;
-        Destroy(gameObject, .7f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -42,6 +42,8 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
+        Destroy(gameObject, deathTime);
+
         if (pierceCount <= 0 || hitObjs.Count >= Pierce)
         {
             Destroy(gameObject);
