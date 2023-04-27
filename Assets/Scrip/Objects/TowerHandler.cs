@@ -20,8 +20,11 @@ public class TowerViewEditor : Editor
                        findDelay;
 
     SerializedProperty projectileDeathTime,
+                       projectilePierce,
                        targetLayer,
                        objectLayer;
+
+    SerializedProperty projectileDamage;
 
     private void OnEnable()
     {
@@ -35,6 +38,8 @@ public class TowerViewEditor : Editor
         projectileDeathTime = serializedObject.FindProperty("projectileDeathTime");
         targetLayer = serializedObject.FindProperty("targetMask");
         objectLayer = serializedObject.FindProperty("objectMask");
+        projectilePierce = serializedObject.FindProperty("projectilePierce");
+        projectileDamage = serializedObject.FindProperty("projectileDamage");
     }
 
     public override void OnInspectorGUI()
@@ -67,6 +72,12 @@ public class TowerViewEditor : Editor
                 EditorGUILayout.Slider(findDelay, 0, 3, "         Fire Rate");
                 EditorGUILayout.Slider(projectileSpeed, 0, 100, "         Bullet Speed");
                 EditorGUILayout.Slider(projectileDeathTime, 0, 2, "         Bullet Death Time");
+
+                EditorGUILayout.Separator();
+
+                EditorGUILayout.IntSlider(projectileDamage, 1, 100, "         Projectile Damage");
+                EditorGUILayout.IntSlider(projectilePierce, 1, 10, "         Projectile Pierce");
+
                 break;
 
             case (TowerHandler.FireType.Multi):
@@ -184,6 +195,12 @@ public class TowerHandler : MonoBehaviour
                  findDelay;
 
     [HideInInspector]
+    public int projectileDamage;
+
+    [HideInInspector]
+    public int projectilePierce;
+
+    [HideInInspector]
     public Projectile projectile;
     Projectile p;
     bool isActive = false;
@@ -210,10 +227,15 @@ public class TowerHandler : MonoBehaviour
         }
     }
 
-    void SpawnProjectile(Vector3 dir)
+    void SpawnProjectile(Vector3 dir, bool normalize = true)
     {
         p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
-        p.rb.AddForce((dir - transform.position).normalized * projectileSpeed, ForceMode2D.Impulse);
+
+        p.Damage = projectileDamage;
+        p.Pierce = projectilePierce;
+        p.deathTime = projectileDeathTime;
+
+        p.rb.AddForce(((normalize) ? (dir - transform.position).normalized : dir) * projectileSpeed, ForceMode2D.Impulse);
     }
 
     void ShootProjectile()
@@ -236,9 +258,7 @@ public class TowerHandler : MonoBehaviour
                     float degreesPer = Mathf.PI * 2 / bulletCount;
                     Vector2 dir = new Vector2((float)Mathf.Cos(i * degreesPer), (float)Mathf.Sin(i * degreesPer));
 
-                    p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
-                    p.deathTime = projectileDeathTime;
-                    p.rb.AddForce(dir.normalized * projectileSpeed, ForceMode2D.Impulse);
+                    SpawnProjectile(dir, false);
                 }
 
                 break;
