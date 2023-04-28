@@ -24,6 +24,9 @@ public class TowerViewEditor : Editor
                        targetLayer,
                        objectLayer;
 
+    SerializedProperty minRange,
+                       maxRange;
+
     SerializedProperty projectileDamage;
 
     private void OnEnable()
@@ -40,6 +43,8 @@ public class TowerViewEditor : Editor
         objectLayer = serializedObject.FindProperty("objectMask");
         projectilePierce = serializedObject.FindProperty("projectilePierce");
         projectileDamage = serializedObject.FindProperty("projectileDamage");
+        minRange = serializedObject.FindProperty("rangeMin");
+        maxRange = serializedObject.FindProperty("rangeMax");
     }
 
     public override void OnInspectorGUI()
@@ -51,16 +56,13 @@ public class TowerViewEditor : Editor
         EditorGUILayout.Separator();
 
         EditorGUILayout.LabelField("Tower Projectile Settings", EditorStyles.boldLabel);
-
         EditorGUILayout.Separator();
 
         EditorGUILayout.ObjectField(projectile);
-
         EditorGUILayout.Separator();
 
         EditorGUILayout.PropertyField(currentStateFire);
         TowerHandler.FireType st = (TowerHandler.FireType)currentStateFire.enumValueIndex;
-
         EditorGUILayout.Separator();
 
         switch (st)
@@ -89,6 +91,13 @@ public class TowerViewEditor : Editor
                 EditorGUILayout.Slider(findDelay, 0, 3, "         Fire Rate");
                 EditorGUILayout.Slider(projectileSpeed, 0, 100, "         Bullet Speed");
                 EditorGUILayout.Slider(projectileDeathTime, 0, 2, "         Bullet Death Time");
+
+
+                EditorGUILayout.IntSlider(minRange, -10, 10, "         Minimum variation");
+                EditorGUILayout.IntSlider(maxRange, -10, 10, "         Maximum variation");
+
+                EditorGUILayout.IntSlider(projectileDamage, 1, 100, "         Projectile Damage");
+                EditorGUILayout.IntSlider(projectilePierce, 1, 10, "         Projectile Pierce");
                 break;
 
             case (TowerHandler.FireType.Radial):
@@ -98,7 +107,10 @@ public class TowerViewEditor : Editor
                 EditorGUILayout.IntSlider(bulletCount, 0, 200, "         Bullet Count");
                 EditorGUILayout.Slider(findDelay, 0, 3, "         Fire Rate");
                 EditorGUILayout.Slider(projectileSpeed, 0, 100, "         Bullet Speed");
-                EditorGUILayout.Slider(projectileDeathTime, 0, 2, "         Bullet Death Time"); 
+                EditorGUILayout.Slider(projectileDeathTime, 0, 2, "         Bullet Death Time");
+
+                EditorGUILayout.IntSlider(projectileDamage, 1, 100, "         Projectile Damage");
+                EditorGUILayout.IntSlider(projectilePierce, 1, 10, "         Projectile Pierce");
                 break;
 
             case (TowerHandler.FireType.AOE):
@@ -187,6 +199,12 @@ public class TowerHandler : MonoBehaviour
     public LayerMask targetMask,
                  objectMask;
 
+    [HideInInspector]
+    public int rangeMin;
+
+    [HideInInspector]
+    public int rangeMax;
+
     List<PathFollow> targets = new List<PathFollow>();
 
     [HideInInspector]
@@ -220,7 +238,7 @@ public class TowerHandler : MonoBehaviour
             isActive = true;
 
             if (isActive)
-                ShootProjectile();
+                FindTargets();
 
             yield return new WaitForSeconds(delay);
             isActive = false;
@@ -238,20 +256,28 @@ public class TowerHandler : MonoBehaviour
         p.rb.AddForce(((normalize) ? (dir - transform.position).normalized : dir) * projectileSpeed, ForceMode2D.Impulse);
     }
 
-    void ShootProjectile()
+    void ShootProjectile(Vector3 direction)
     {
         switch (fireType)
         {
             case (FireType.Single):
-                FindTargets();
+                SpawnProjectile(direction, true);
                 break;
 
             case (FireType.Multi):
-                FindTargets();
+
+                for (int i = -(bulletCount / 2); i < (bulletCount / 2); i++)
+                {
+                    if (i == 0) SpawnProjectile(direction, true);
+                    else
+                    {
+                        SpawnProjectile(new Vector3(direction.x + (i >= 0 ? rangeMax / Mathf.Abs(i) : rangeMin / Mathf.Abs(i)), direction.y + (i >= 0 ? rangeMax / Mathf.Abs(i) : rangeMin / Mathf.Abs(i)), direction.z), true);
+                    }
+                }
+
                 break;
 
             case (FireType.Radial):
-                FindTargets();
 
                 for (int i = 0; i < bulletCount; i++)
                 {
@@ -264,7 +290,7 @@ public class TowerHandler : MonoBehaviour
                 break;
 
             case (FireType.AOE):
-                FindTargets();
+
                 break;
         }
     }
@@ -313,7 +339,7 @@ public class TowerHandler : MonoBehaviour
                 break;
         }
 
-        SpawnProjectile(dir);
+        ShootProjectile(dir);
     }
 
     public Vector3 AngleDir(float angle, bool globalAngle)

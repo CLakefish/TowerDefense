@@ -347,8 +347,8 @@ MonoBehaviour:
   cam: {fileID: 342748528}
   spawnedObjVisual: {fileID: 934635921}
   spawnedObj:
-  - {fileID: 7283212290416079902, guid: e1274b7abac23ac4fbceb95268d03c88, type: 3}
-  - {fileID: 7283212290416079902, guid: e1274b7abac23ac4fbceb95268d03c88, type: 3}
+  - {fileID: 7300209478513895652, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+  - {fileID: 7300209478513895652, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
   placableLayer:
     serializedVersion: 2
     m_Bits: 2
