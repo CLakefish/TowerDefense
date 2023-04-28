@@ -969,6 +969,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Square (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7300209478513895654, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 023a66046b680d243965c80a9f077a59, type: 3}
+    - target: {fileID: 7300209478513895655, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+      propertyPath: fireType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300209478513895655, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+      propertyPath: findDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300209478513895655, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+      propertyPath: bulletCount
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300209478513895655, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
+      propertyPath: projectileSpeed
+      value: 38.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7300209478513895657, guid: 134ac551bd39ff74ea55db7cb0b37f1e, type: 3}
       propertyPath: m_RootOrder
       value: 7

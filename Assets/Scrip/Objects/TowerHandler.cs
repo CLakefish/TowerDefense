@@ -28,6 +28,7 @@ public class TowerViewEditor : Editor
                        maxRange;
 
     SerializedProperty projectileDamage;
+    SerializedProperty projectileType;
 
     private void OnEnable()
     {
@@ -45,6 +46,7 @@ public class TowerViewEditor : Editor
         projectileDamage = serializedObject.FindProperty("projectileDamage");
         minRange = serializedObject.FindProperty("rangeMin");
         maxRange = serializedObject.FindProperty("rangeMax");
+        projectileType = serializedObject.FindProperty("projectileType");
     }
 
     public override void OnInspectorGUI()
@@ -57,6 +59,8 @@ public class TowerViewEditor : Editor
 
         EditorGUILayout.LabelField("Tower Projectile Settings", EditorStyles.boldLabel);
         EditorGUILayout.Separator();
+
+        EditorGUILayout.PropertyField(projectileType);
 
         EditorGUILayout.ObjectField(projectile);
         EditorGUILayout.Separator();
@@ -73,7 +77,7 @@ public class TowerViewEditor : Editor
 
                 EditorGUILayout.Slider(findDelay, 0, 3, "         Fire Rate");
                 EditorGUILayout.Slider(projectileSpeed, 0, 100, "         Bullet Speed");
-                EditorGUILayout.Slider(projectileDeathTime, 0, 2, "         Bullet Death Time");
+                EditorGUILayout.Slider(projectileDeathTime, 0, 5, "         Bullet Death Time");
 
                 EditorGUILayout.Separator();
 
@@ -175,8 +179,11 @@ public class TowerHandler : MonoBehaviour
 
     #endregion
 
-    [HideInInspector]
+    [Header("Targetting Type")]
     public TargetType targetType;
+
+    [HideInInspector]
+    public Projectile.ProjectileType projectileType;
 
     [HideInInspector]
     public FireType fireType;
@@ -249,11 +256,21 @@ public class TowerHandler : MonoBehaviour
     {
         p = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
 
+        p.projectileType = projectileType;
+
+        if (projectileType == Projectile.ProjectileType.Follow)
+        {
+            foreach(PathFollow t in targets)
+            {
+                p.targets.Add(t.gameObject);
+            }
+        }
+
         p.Damage = projectileDamage;
         p.Pierce = projectilePierce;
         p.deathTime = projectileDeathTime;
 
-        p.rb.AddForce(((normalize) ? (dir - transform.position).normalized : dir) * projectileSpeed, ForceMode2D.Impulse);
+        p.Move(dir, normalize, projectileSpeed);
     }
 
     void ShootProjectile(Vector3 direction)
